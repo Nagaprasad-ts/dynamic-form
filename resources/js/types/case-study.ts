@@ -12,10 +12,40 @@ export interface ImageBlockData {
     alt: string;
 }
 
+export interface KeyValueBlockData {
+    label: string | null;
+    pairs: Record<string, string>;
+}
+
+export interface DateBlockData {
+    label: string | null;
+    date: string;
+}
+
+export interface CheckboxBlockData {
+    label: string;
+    checked: boolean;
+}
+
+export interface SelectBlockData {
+    label: string | null;
+    value: string | null;
+}
+
+export interface MultiSelectBlockData {
+    label: string | null;
+    values: string[];
+}
+
 export type ContentBlock =
     | { type: 'heading'; data: HeadingBlockData }
     | { type: 'paragraph'; data: ParagraphBlockData }
-    | { type: 'image'; data: ImageBlockData };
+    | { type: 'image'; data: ImageBlockData }
+    | { type: 'key_value'; data: KeyValueBlockData }
+    | { type: 'date'; data: DateBlockData }
+    | { type: 'checkbox'; data: CheckboxBlockData }
+    | { type: 'select'; data: SelectBlockData }
+    | { type: 'multiselect'; data: MultiSelectBlockData };
 
 export interface ContentSection {
     section_title: string | null;

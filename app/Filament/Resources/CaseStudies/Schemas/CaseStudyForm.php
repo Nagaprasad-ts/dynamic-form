@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\CaseStudies\Schemas;
 
 use App\Models\CaseStudy;
+use App\Models\Deliverable;
 use Filament\Forms\Components\Builder;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\Checkbox;
@@ -137,6 +138,59 @@ class CaseStudyForm
                                                     ->maxLength(255),
                                             ])
                                             ->label('Image'),
+                                        Block::make('key_value')
+                                            ->label('Key Value')
+                                            ->schema([
+                                                TextInput::make('label')
+                                                    ->label('Title')
+                                                    ->maxLength(255),
+                                                KeyValue::make('pairs')
+                                                    ->keyLabel('Label')
+                                                    ->valueLabel('Value')
+                                                    ->required(),
+                                            ]),
+                                        Block::make('date')
+                                            ->label('Date')
+                                            ->schema([
+                                                TextInput::make('label')
+                                                    ->maxLength(255),
+                                                DatePicker::make('date')
+                                                    ->required(),
+                                            ])
+                                            ->columns(2),
+                                        Block::make('checkbox')
+                                            ->label('Checkbox')
+                                            ->schema([
+                                                TextInput::make('label')
+                                                    ->required()
+                                                    ->maxLength(255),
+                                                Checkbox::make('checked'),
+                                            ])
+                                            ->columns(2),
+                                        Block::make('select')
+                                            ->label('Select')
+                                            ->schema([
+                                                TextInput::make('label')
+                                                    ->maxLength(255),
+                                                Select::make('value')
+                                                    ->label('Category')
+                                                    ->options(fn (): array => Deliverable::query()->orderBy('name')->pluck('name', 'id')->all())
+                                                    ->searchable()
+                                                    ->required(),
+                                            ])
+                                            ->columns(2),
+                                        Block::make('multiselect')
+                                            ->label('Multi-select')
+                                            ->schema([
+                                                TextInput::make('label')
+                                                    ->maxLength(255),
+                                                Select::make('values')
+                                                    ->label('Categories')
+                                                    ->multiple()
+                                                    ->options(fn (): array => Deliverable::query()->orderBy('name')->pluck('name', 'id')->all())
+                                                    ->searchable()
+                                                    ->required(),
+                                            ]),
                                     ])
                                     ->minItems(1)
                                     ->required(),

@@ -27,14 +27,121 @@ function ContentBlockView({ block }: { block: ContentBlock }) {
         );
     }
 
+    if (block.type === 'image') {
+        return (
+            <figure>
+                <img
+                    src={block.data.url}
+                    alt={block.data.alt}
+                    className="w-full rounded-lg"
+                />
+            </figure>
+        );
+    }
+
+    if (block.type === 'key_value') {
+        return (
+            <div>
+                {block.data.label && (
+                    <h3 className="mb-3 text-sm font-semibold tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
+                        {block.data.label}
+                    </h3>
+                )}
+                <dl className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+                    {Object.entries(block.data.pairs).map(([key, value]) => (
+                        <div key={key}>
+                            <dt className="text-xs font-medium tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
+                                {key}
+                            </dt>
+                            <dd className="mt-1 text-sm font-medium">{value}</dd>
+                        </div>
+                    ))}
+                </dl>
+            </div>
+        );
+    }
+
+    if (block.type === 'date') {
+        const formatted = new Date(block.data.date).toLocaleDateString(undefined, {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        });
+
+        return (
+            <div>
+                {block.data.label && (
+                    <dt className="text-xs font-medium tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
+                        {block.data.label}
+                    </dt>
+                )}
+                <dd className="mt-1 text-sm font-medium">{formatted}</dd>
+            </div>
+        );
+    }
+
+    if (block.type === 'checkbox') {
+        return (
+            <div className="flex items-center gap-2">
+                <span
+                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border ${
+                        block.data.checked
+                            ? 'border-neutral-900 bg-neutral-900 text-white dark:border-neutral-100 dark:bg-neutral-100 dark:text-neutral-900'
+                            : 'border-neutral-300 dark:border-neutral-700'
+                    }`}
+                >
+                    {block.data.checked && (
+                        <svg viewBox="0 0 16 16" fill="none" className="h-3 w-3">
+                            <path
+                                d="M3 8.5L6.5 12L13 4.5"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
+                        </svg>
+                    )}
+                </span>
+                <span className="text-sm">{block.data.label}</span>
+            </div>
+        );
+    }
+
+    if (block.type === 'select') {
+        return (
+            <div>
+                {block.data.label && (
+                    <dt className="text-xs font-medium tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
+                        {block.data.label}
+                    </dt>
+                )}
+                {block.data.value && (
+                    <span className="mt-1 inline-block rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-700 dark:bg-neutral-900 dark:text-neutral-300">
+                        {block.data.value}
+                    </span>
+                )}
+            </div>
+        );
+    }
+
     return (
-        <figure>
-            <img
-                src={block.data.url}
-                alt={block.data.alt}
-                className="w-full rounded-lg"
-            />
-        </figure>
+        <div>
+            {block.data.label && (
+                <dt className="text-xs font-medium tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
+                    {block.data.label}
+                </dt>
+            )}
+            <div className="mt-1 flex flex-wrap gap-2">
+                {block.data.values.map((value) => (
+                    <span
+                        key={value}
+                        className="rounded-full bg-neutral-100 px-3 py-1 text-xs font-medium text-neutral-700 dark:bg-neutral-900 dark:text-neutral-300"
+                    >
+                        {value}
+                    </span>
+                ))}
+            </div>
+        </div>
     );
 }
 
